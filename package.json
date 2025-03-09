@@ -1,0 +1,91 @@
+{
+  "name": "highlight-buddy",
+  "displayName": "Highlight Buddy",
+  "description": "A simple and efficient code highlighter with multiple colors and customizable opacity. Perfect for code reviews and presentations.",
+  "version": "1.0.0",
+  "publisher": "siddarth",
+  "engines": {
+    "vscode": "^1.98.0"
+  },
+  "categories": [
+    "Other",
+    "Formatters",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "highlight",
+    "color",
+    "presentation",
+    "code review",
+    "markup"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "highlight-buddy.highlightRed",
+        "title": "Highlight Buddy: Highlight Selection (Red)"
+      },
+      {
+        "command": "highlight-buddy.highlightBlue",
+        "title": "Highlight Buddy: Highlight Selection (Blue)"
+      },
+      {
+        "command": "highlight-buddy.highlightGreen",
+        "title": "Highlight Buddy: Highlight Selection (Green)"
+      },
+      {
+        "command": "highlight-buddy.highlightPurple",
+        "title": "Highlight Buddy: Highlight Selection (Purple)"
+      },
+      {
+        "command": "highlight-buddy.highlightWithOpacity",
+        "title": "Highlight Buddy: Highlight Selection with Opacity"
+      },
+      {
+        "command": "highlight-buddy.clearAllHighlights",
+        "title": "Highlight Buddy: Clear All Highlights"
+      },
+      {
+        "command": "highlight-buddy.highlight",
+        "title": "Highlight Buddy: Highlight Selection (Last Color)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "highlight-buddy.highlight",
+        "key": "cmd+h",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.98.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
+    "eslint": "^9.21.0",
+    "typescript": "^5.7.3",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Siddarthsangavi/highlight-buddy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Siddarthsangavi/highlight-buddy/issues"
+  },
+  "homepage": "https://github.com/Siddarthsangavi/highlight-buddy#readme",
+  "license": "MIT"
+}
