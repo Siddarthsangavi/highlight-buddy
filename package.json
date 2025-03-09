@@ -3,7 +3,7 @@
   "displayName": "Highlight Buddy",
   "description": "A simple and efficient code highlighter with multiple colors and customizable opacity. Perfect for code reviews and presentations.",
   "version": "1.0.0",
-  "publisher": "siddarth",
+  "publisher": "SiddharthSangavi",
   "engines": {
     "vscode": "^1.98.0"
   },
