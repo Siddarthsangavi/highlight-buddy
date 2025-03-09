@@ -8,10 +8,15 @@ All notable changes to the "Highlight Buddy" extension will be documented in thi
 - Removed yellow highlight option for better color consistency
 - Changed default keyboard shortcut to trigger blue highlight
 
+## [1.0.1] - 2024
+
+### Changes
+- Added extension icon
+- Fixed color persistence when using keyboard shortcut (Cmd+H)
+
 ## [1.0.0] - 2024
 
 ### Initial Release
-
 - Multiple color highlighting options (Blue, Red, Green, Purple)
 - Adjustable opacity levels (0.2 to 1.0)
 - Default blue color with 0.8 opacity
