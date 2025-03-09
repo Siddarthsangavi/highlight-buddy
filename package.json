@@ -2,7 +2,7 @@
   "name": "highlight-buddy",
   "displayName": "Highlight Buddy",
   "description": "A simple and efficient code highlighter with multiple colors and customizable opacity. Perfect for code reviews and presentations.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "SiddharthSangavi",
   "icon": "Buddy.png",
   "engines": {
