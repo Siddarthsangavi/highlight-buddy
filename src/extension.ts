@@ -194,14 +194,24 @@ class HighlightManager {
     }
 
     public clearAllHighlights(editor: vscode.TextEditor) {
-        const editorKey = this.getEditorKey(editor);
-        this.editorDecorations.delete(editorKey);
+        // Clear all decorations from all editors
+        this.editorDecorations.clear();
         
+        // Clear decorations from the current editor
         this.decorationTypes.forEach(decorationType => {
             editor.setDecorations(decorationType, []);
         });
 
-        this.saveDecorations(); // Save after clearing decorations
+        // Clear decorations from all visible editors
+        vscode.window.visibleTextEditors.forEach(visibleEditor => {
+            if (visibleEditor !== editor) {
+                this.decorationTypes.forEach(decorationType => {
+                    visibleEditor.setDecorations(decorationType, []);
+                });
+            }
+        });
+
+        this.saveDecorations(); // Save after clearing all decorations
     }
 }
 
