@@ -47,7 +47,9 @@ class HighlightManager {
             opacities.forEach(opacity => {
                 const key = `${color}-${opacity}`;
                 this.decorationTypes.set(key, vscode.window.createTextEditorDecorationType({
-                    backgroundColor: `rgba(${this.getColorRGB(color)},${opacity})`
+                    backgroundColor: `rgba(${this.getColorRGB(color)},${opacity})`,
+                    overviewRulerColor: `rgba(${this.getColorRGB(color)},${opacity})`,
+                    overviewRulerLane: vscode.OverviewRulerLane.Right
                 }));
             });
         });
