@@ -37,19 +37,25 @@ You can access all commands through the Command Palette (`Cmd+Shift+P` on macOS)
    - Select the text you want to highlight
    - Press `Cmd+H` to highlight with the current color (default: blue)
 
-2. **Changing Colors**
+2. **Hover Actions**
+   - Hover over any highlighted text to see available actions
+   - Click "Change Color" to change the color of the specific highlight
+   - Click "Remove Highlight" to remove just that highlight
+
+3. **Changing Colors**
    - Open Command Palette (`Cmd+Shift+P`)
    - Type "Highlight" to see all available colors
    - Select your preferred color
    - The new color becomes the default for subsequent highlights
+   - Or hover over an existing highlight and use "Change Color"
 
-3. **Custom Opacity**
+4. **Custom Opacity**
    - Open Command Palette
    - Select "Highlight Selection with Opacity"
    - Enter a value between 0 and 1 (e.g., 0.5 for 50% opacity)
    - The new opacity becomes the default for subsequent highlights
 
-4. **Clearing Highlights**
+5. **Clearing Highlights**
    - To remove all highlights, open Command Palette
    - Select "Highlight Buddy: Clear All Highlights"
 

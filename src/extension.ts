@@ -15,6 +15,7 @@ class HighlightManager {
     private lastColor: HighlightColor;
     private lastOpacity: number;
     private context: vscode.ExtensionContext;
+    private hoverProvider: vscode.Disposable | undefined;
 
     constructor(context: vscode.ExtensionContext) {
         this.context = context;
@@ -37,6 +38,8 @@ class HighlightManager {
             });
             this.editorDecorations.set(editorKey, decorationMap);
         });
+
+        this.registerHoverProvider();
     }
 
     private createDecorationTypes() {
@@ -136,34 +139,16 @@ class HighlightManager {
             return; // No valid selections to highlight
         }
 
-        // Check if any of the selections are already highlighted
-        const decorationsToRemove = new Set<string>();
-        let hasExistingHighlight = false;
-
-        decorations.forEach((decoration, id) => {
-            if (effectiveSelections.some(selection => this.rangesOverlap(selection, decoration.range))) {
-                decorationsToRemove.add(id);
-                hasExistingHighlight = true;
-            }
-        });
-
-        // Remove overlapping decorations
-        decorationsToRemove.forEach(id => {
-            decorations.delete(id);
-        });
-
-        // If there were no existing highlights, add new ones
-        if (!hasExistingHighlight) {
-            effectiveSelections.forEach(selection => {
-                const id = this.generateId();
-                decorations.set(id, {
-                    id,
-                    range: new vscode.Range(selection.start, selection.end),
-                    color: this.lastColor,
-                    opacity: this.lastOpacity
-                });
+        // Add new highlights for the selections
+        effectiveSelections.forEach(selection => {
+            const id = this.generateId();
+            decorations.set(id, {
+                id,
+                range: new vscode.Range(selection.start, selection.end),
+                color: this.lastColor,
+                opacity: this.lastOpacity
             });
-        }
+        });
 
         this.updateEditorDecorations(editor);
         this.saveDecorations(); // Save after updating decorations
@@ -212,6 +197,163 @@ class HighlightManager {
         });
 
         this.saveDecorations(); // Save after clearing all decorations
+    }
+
+    private registerHoverProvider() {
+        this.hoverProvider = vscode.languages.registerHoverProvider('*', {
+            provideHover: (document, position) => {
+                const editor = vscode.window.activeTextEditor;
+                if (!editor || editor.document !== document) {
+                    return undefined;
+                }
+
+                const decorations = this.getOrCreateEditorDecorations(editor);
+                let foundDecoration: HighlightDecoration | undefined;
+
+                decorations.forEach(decoration => {
+                    if (decoration.range.contains(position)) {
+                        foundDecoration = decoration;
+                    }
+                });
+
+                if (!foundDecoration) {
+                    return undefined;
+                }
+
+                const commandLinks = [
+                    new vscode.MarkdownString(`[Change Color](command:highlight-buddy.changeHighlightColor?${encodeURIComponent(JSON.stringify([position]))})`),
+                    new vscode.MarkdownString(`[Remove Highlight](command:highlight-buddy.removeHighlight?${encodeURIComponent(JSON.stringify([position]))})`)
+                ];
+
+                commandLinks.forEach(link => link.isTrusted = true);
+                return new vscode.Hover(commandLinks);
+            }
+        });
+    }
+
+    public getDecorationAtPosition(editor: vscode.TextEditor, position: vscode.Position): HighlightDecoration | undefined {
+        const decorations = this.getOrCreateEditorDecorations(editor);
+        let foundDecoration: HighlightDecoration | undefined;
+
+        decorations.forEach(decoration => {
+            if (decoration.range.contains(position)) {
+                foundDecoration = decoration;
+            }
+        });
+
+        return foundDecoration;
+    }
+
+    public removeHighlightAtPosition(editor: vscode.TextEditor, position: vscode.Position) {
+        const decorations = this.getOrCreateEditorDecorations(editor);
+        decorations.forEach((decoration, id) => {
+            if (decoration.range.contains(position)) {
+                decorations.delete(id);
+            }
+        });
+        this.updateEditorDecorations(editor);
+        this.saveDecorations();
+    }
+
+    private splitDecoration(decoration: HighlightDecoration, selection: vscode.Selection): HighlightDecoration[] {
+        const result: HighlightDecoration[] = [];
+        
+        // If selection completely contains decoration or matches exactly, return empty array
+        if (selection.contains(decoration.range)) {
+            return result;
+        }
+
+        // If selection is within decoration, split into two parts
+        if (decoration.range.contains(selection)) {
+            // Create decoration before selection if needed
+            if (!decoration.range.start.isEqual(selection.start)) {
+                result.push({
+                    id: this.generateId(),
+                    range: new vscode.Range(decoration.range.start, selection.start),
+                    color: decoration.color,
+                    opacity: decoration.opacity
+                });
+            }
+            
+            // Create decoration after selection if needed
+            if (!decoration.range.end.isEqual(selection.end)) {
+                result.push({
+                    id: this.generateId(),
+                    range: new vscode.Range(selection.end, decoration.range.end),
+                    color: decoration.color,
+                    opacity: decoration.opacity
+                });
+            }
+        }
+        // If there's partial overlap, keep the non-overlapping part
+        else if (this.rangesOverlap(decoration.range, selection)) {
+            if (decoration.range.start.isBefore(selection.start)) {
+                result.push({
+                    id: this.generateId(),
+                    range: new vscode.Range(decoration.range.start, selection.start),
+                    color: decoration.color,
+                    opacity: decoration.opacity
+                });
+            } else {
+                result.push({
+                    id: this.generateId(),
+                    range: new vscode.Range(selection.end, decoration.range.end),
+                    color: decoration.color,
+                    opacity: decoration.opacity
+                });
+            }
+        }
+        // If no overlap, keep original decoration
+        else {
+            result.push(decoration);
+        }
+
+        return result;
+    }
+
+    public changeHighlightColor(editor: vscode.TextEditor, selection: vscode.Selection, newColor: HighlightColor) {
+        const decorations = this.getOrCreateEditorDecorations(editor);
+        const decorationsToAdd: HighlightDecoration[] = [];
+        const decorationsToRemove = new Set<string>();
+
+        // Process existing decorations
+        decorations.forEach((decoration, id) => {
+            if (this.rangesOverlap(selection, decoration.range)) {
+                // Split or remove existing decoration
+                const splitDecorations = this.splitDecoration(decoration, selection);
+                decorationsToRemove.add(id);
+                decorationsToAdd.push(...splitDecorations);
+            }
+        });
+
+        // Remove old decorations
+        decorationsToRemove.forEach(id => {
+            decorations.delete(id);
+        });
+
+        // Add split decorations
+        decorationsToAdd.forEach(decoration => {
+            decorations.set(decoration.id, decoration);
+        });
+
+        // Add new decoration for selected area
+        const newDecoration: HighlightDecoration = {
+            id: this.generateId(),
+            range: selection,
+            color: newColor,
+            opacity: this.lastOpacity
+        };
+        decorations.set(newDecoration.id, newDecoration);
+
+        this.updateEditorDecorations(editor);
+        this.saveDecorations();
+    }
+
+    public dispose() {
+        if (this.hoverProvider) {
+            this.hoverProvider.dispose();
+        }
+        this.decorationTypes.forEach(type => type.dispose());
     }
 }
 
@@ -303,6 +445,36 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    const removeHighlightCommand = vscode.commands.registerCommand('highlight-buddy.removeHighlight', (position?: vscode.Position) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // Use provided position from hover or fallback to cursor position
+            const pos = position ?? editor.selection.active;
+            highlightManager.removeHighlightAtPosition(editor, pos);
+        }
+    });
+
+    const changeHighlightColorCommand = vscode.commands.registerCommand('highlight-buddy.changeHighlightColor', async (position?: vscode.Position) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // Use provided position from hover or fallback to cursor position
+            const pos = position ?? editor.selection.active;
+            const decoration = highlightManager.getDecorationAtPosition(editor, pos);
+            
+            if (decoration) {
+                const colors: HighlightColor[] = ['red', 'blue', 'green', 'purple'];
+                const selected = await vscode.window.showQuickPick(colors, {
+                    placeHolder: 'Select a color'
+                });
+                
+                if (selected) {
+                    await highlightManager.setLastColor(selected as HighlightColor);
+                    highlightManager.changeHighlightColor(editor, new vscode.Selection(decoration.range.start, decoration.range.end), selected as HighlightColor);
+                }
+            }
+        }
+    });
+
     context.subscriptions.push(
         highlightCommand,
         highlightRedCommand,
@@ -310,7 +482,9 @@ export function activate(context: vscode.ExtensionContext) {
         highlightGreenCommand,
         highlightPurpleCommand,
         highlightWithOpacityCommand,
-        clearAllHighlightsCommand
+        clearAllHighlightsCommand,
+        removeHighlightCommand,
+        changeHighlightColorCommand
     );
 }
 

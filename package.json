@@ -51,6 +51,14 @@
       {
         "command": "highlight-buddy.highlight",
         "title": "Highlight Buddy: Highlight Selection (Last Color)"
+      },
+      {
+        "command": "highlight-buddy.removeHighlight",
+        "title": "Remove Highlight"
+      },
+      {
+        "command": "highlight-buddy.changeHighlightColor",
+        "title": "Change Highlight Color"
       }
     ],
     "keybindings": [
