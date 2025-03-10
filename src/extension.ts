@@ -136,26 +136,34 @@ class HighlightManager {
             return; // No valid selections to highlight
         }
 
+        // Check if any of the selections are already highlighted
         const decorationsToRemove = new Set<string>();
+        let hasExistingHighlight = false;
+
         decorations.forEach((decoration, id) => {
             if (effectiveSelections.some(selection => this.rangesOverlap(selection, decoration.range))) {
                 decorationsToRemove.add(id);
+                hasExistingHighlight = true;
             }
         });
 
+        // Remove overlapping decorations
         decorationsToRemove.forEach(id => {
             decorations.delete(id);
         });
 
-        effectiveSelections.forEach(selection => {
-            const id = this.generateId();
-            decorations.set(id, {
-                id,
-                range: new vscode.Range(selection.start, selection.end),
-                color: this.lastColor,
-                opacity: this.lastOpacity
+        // If there were no existing highlights, add new ones
+        if (!hasExistingHighlight) {
+            effectiveSelections.forEach(selection => {
+                const id = this.generateId();
+                decorations.set(id, {
+                    id,
+                    range: new vscode.Range(selection.start, selection.end),
+                    color: this.lastColor,
+                    opacity: this.lastOpacity
+                });
             });
-        });
+        }
 
         this.updateEditorDecorations(editor);
         this.saveDecorations(); // Save after updating decorations
