@@ -1,74 +1,91 @@
 # Highlight Buddy
 
-Highlight Buddy is a Visual Studio Code extension that allows you to easily highlight code blocks with different colors and customizable opacity. Perfect for code reviews, presentations, or personal reference.
+A powerful Visual Studio Code extension for code highlighting with multiple colors, customizable opacity, and intuitive management features. Perfect for code reviews, presentations, or personal reference.
 
 ## Features
 
-- Multiple color options (Blue, Red, Green, Purple, Yellow)
+- Multiple color options (Blue, Red, Green, Purple)
 - Adjustable opacity levels (0.2 to 1.0)
 - Quick highlighting with keyboard shortcuts
-- Independent color highlights (different sections can have different colors)
-- Easy to clear all highlights
+- Hover menu for quick actions
+- Multiple overlapping highlights support
+- Minimap visibility
+- Full line highlighting
+- Cross-file highlight management
+
+## Installation
+
+1. Install from VS Code Marketplace by searching for "Highlight Buddy"
+2. Or install the VSIX file directly from VS Code
+3. Restart VS Code after installation
+
+## Usage
+
+### Basic Highlighting
+1. **Quick Highlight**
+   - Select text you want to highlight (or place cursor on a line)
+   - Press `Cmd+H` (macOS) to highlight with last used color
+   - If no text is selected, the entire line will be highlighted
+
+2. **Managing Highlights**
+   - Hover over any highlighted text to see options:
+     - "Change Color": Changes the color of that specific highlight
+     - "Remove Highlight": Removes just that highlight
+   - These actions work regardless of cursor position
+
+3. **Using Different Colors**
+   - Via Command Palette (`Cmd+Shift+P`):
+     - "Highlight Buddy: Highlight Selection (Red)"
+     - "Highlight Buddy: Highlight Selection (Blue)"
+     - "Highlight Buddy: Highlight Selection (Green)"
+     - "Highlight Buddy: Highlight Selection (Purple)"
+   - Or use hover menu to change colors of existing highlights
+
+4. **Customizing Opacity**
+   - Open Command Palette
+   - Select "Highlight Buddy: Highlight Selection with Opacity"
+   - Enter a value between 0 and 1 (e.g., 0.5 for 50% opacity)
+
+5. **Clearing Highlights**
+   - To remove all highlights across all files:
+     - Open Command Palette
+     - Select "Highlight Buddy: Clear All Highlights"
+   - To remove a specific highlight:
+     - Hover over the highlight
+     - Click "Remove Highlight"
+
+### Advanced Features
+
+1. **Multiple Overlapping Highlights**
+   - You can highlight code that's already highlighted
+   - Highlights won't interfere with each other
+   - Great for marking multiple aspects of the same code
+
+2. **Full Line Highlighting**
+   - Place cursor anywhere in a line (no selection needed)
+   - Press `Cmd+H` to highlight the entire line
+
+3. **Minimap Integration**
+   - Highlights are visible in the minimap
+   - Makes it easy to navigate through highlighted sections
 
 ## Default Settings
 
 - Default Color: Blue
 - Default Opacity: 0.8
-
-## Commands
-
-You can access all commands through the Command Palette (`Cmd+Shift+P` on macOS):
-
-- `Highlight Selection (Yellow)`: Highlight selected text in yellow
-- `Highlight Selection (Red)`: Highlight selected text in red
-- `Highlight Selection (Blue)`: Highlight selected text in blue
-- `Highlight Selection (Green)`: Highlight selected text in green
-- `Highlight Selection (Purple)`: Highlight selected text in purple
-- `Highlight Selection with Opacity`: Set custom opacity (0-1) for highlights
-- `Highlight Buddy: Clear All Highlights`: Remove all highlights from the current editor
-
-## Keyboard Shortcuts
-
-- `Cmd+H`: Quick highlight with the last used color and opacity
-
-## Usage
-
-1. **Basic Highlighting**
-   - Select the text you want to highlight
-   - Press `Cmd+H` to highlight with the current color (default: blue)
-
-2. **Hover Actions**
-   - Hover over any highlighted text to see available actions
-   - Click "Change Color" to change the color of the specific highlight
-   - Click "Remove Highlight" to remove just that highlight
-
-3. **Changing Colors**
-   - Open Command Palette (`Cmd+Shift+P`)
-   - Type "Highlight" to see all available colors
-   - Select your preferred color
-   - The new color becomes the default for subsequent highlights
-   - Or hover over an existing highlight and use "Change Color"
-
-4. **Custom Opacity**
-   - Open Command Palette
-   - Select "Highlight Selection with Opacity"
-   - Enter a value between 0 and 1 (e.g., 0.5 for 50% opacity)
-   - The new opacity becomes the default for subsequent highlights
-
-5. **Clearing Highlights**
-   - To remove all highlights, open Command Palette
-   - Select "Highlight Buddy: Clear All Highlights"
+- Default Shortcut: `Cmd+H` (macOS)
 
 ## Notes
 
-- Each highlight maintains its color and opacity independently
-- When you highlight over an existing highlight, the new color replaces the old one
-- Highlights persist until you clear them or close the editor
-- The last used color and opacity settings are remembered for subsequent highlights
+- Highlights persist between VS Code sessions
+- Color and opacity preferences are remembered
+- Multiple files can have highlights simultaneously
+- Supports all file types
+- Works with both light and dark themes
 
 ## Contributing
 
-Feel free to submit issues and enhancement requests on the GitHub repository.
+Feel free to submit issues and enhancement requests on the [GitHub repository](https://github.com/Siddarthsangavi/highlight-buddy).
 
 ## License
 

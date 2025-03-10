@@ -2,6 +2,20 @@
 
 All notable changes to the "Highlight Buddy" extension will be documented in this file.
 
+## [1.2.0] - 2024
+
+### Added
+- Hover menu functionality to manage highlights
+- Improved minimap visibility for highlighted code
+- Multiple overlapping highlights support
+- Full line highlighting when no text is selected
+
+### Changes
+- Enhanced hover actions to work regardless of cursor position
+- Improved highlight behavior to maintain existing highlights when highlighting larger selections
+- Added clearer visual feedback in the minimap
+- Changed "Clear All Highlights" to work across all files
+
 ## [1.1.1] - 2024
 
 ### Changes
