@@ -2,6 +2,11 @@
 
 All notable changes to the "Highlight Buddy" extension will be documented in this file.
 
+## [1.1.1] - 2024
+
+### Changes
+- Updated VS Code engine compatibility to support versions 1.80.0 and above
+
 ## [1.1.0] - 2024
 
 ### Changes
