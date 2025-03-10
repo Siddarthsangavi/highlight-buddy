@@ -120,14 +120,15 @@ class HighlightManager {
     public highlight(editor: vscode.TextEditor, selections: readonly vscode.Selection[]) {
         const decorations = this.getOrCreateEditorDecorations(editor);
         
-        // If no text is selected, use cursor positions to create word selections
+        // If no text is selected, use cursor positions to create selections
         const effectiveSelections = selections.map(selection => {
             if (selection.isEmpty) {
-                const wordRange = editor.document.getWordRangeAtPosition(selection.active);
-                return wordRange ? new vscode.Selection(wordRange.start, wordRange.end) : selection;
+                // If no text is selected, highlight the entire line
+                const line = editor.document.lineAt(selection.active.line);
+                return new vscode.Selection(line.range.start, line.range.end);
             }
             return selection;
-        }).filter(selection => !selection.isEmpty); // Filter out any remaining empty selections
+        });
 
         if (effectiveSelections.length === 0) {
             return; // No valid selections to highlight
