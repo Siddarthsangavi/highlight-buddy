@@ -21,6 +21,22 @@ class HighlightManager {
         this.lastColor = this.context.globalState.get<HighlightColor>('lastColor', 'blue');
         this.lastOpacity = this.context.globalState.get<number>('lastOpacity', 0.8);
         this.createDecorationTypes();
+        
+        // Restore saved decorations
+        const savedDecorations = this.context.globalState.get<any>('editorDecorations', {});
+        Object.entries(savedDecorations).forEach(([editorKey, decorations]: [string, any]) => {
+            const decorationMap = new Map();
+            Object.entries(decorations).forEach(([id, decoration]: [string, any]) => {
+                decorationMap.set(id, {
+                    ...decoration,
+                    range: new vscode.Range(
+                        new vscode.Position(decoration.range.start.line, decoration.range.start.character),
+                        new vscode.Position(decoration.range.end.line, decoration.range.end.character)
+                    )
+                });
+            });
+            this.editorDecorations.set(editorKey, decorationMap);
+        });
     }
 
     private createDecorationTypes() {
@@ -68,6 +84,23 @@ class HighlightManager {
 
     private rangesOverlap(range1: vscode.Range, range2: vscode.Range): boolean {
         return !range1.end.isBefore(range2.start) && !range2.end.isBefore(range1.start);
+    }
+
+    private async saveDecorations() {
+        const decorationsToSave: any = {};
+        this.editorDecorations.forEach((decorations, editorKey) => {
+            decorationsToSave[editorKey] = {};
+            decorations.forEach((decoration, id) => {
+                decorationsToSave[editorKey][id] = {
+                    ...decoration,
+                    range: {
+                        start: { line: decoration.range.start.line, character: decoration.range.start.character },
+                        end: { line: decoration.range.end.line, character: decoration.range.end.character }
+                    }
+                };
+            });
+        });
+        await this.context.globalState.update('editorDecorations', decorationsToSave);
     }
 
     public async setLastColor(color: HighlightColor) {
@@ -122,9 +155,10 @@ class HighlightManager {
         });
 
         this.updateEditorDecorations(editor);
+        this.saveDecorations(); // Save after updating decorations
     }
 
-    private updateEditorDecorations(editor: vscode.TextEditor) {
+    public updateEditorDecorations(editor: vscode.TextEditor) {
         const decorations = this.getOrCreateEditorDecorations(editor);
         const decorationsByType = new Map<string, vscode.Range[]>();
 
@@ -155,6 +189,8 @@ class HighlightManager {
         this.decorationTypes.forEach(decorationType => {
             editor.setDecorations(decorationType, []);
         });
+
+        this.saveDecorations(); // Save after clearing decorations
     }
 }
 
@@ -162,6 +198,21 @@ let highlightManager: HighlightManager;
 
 export function activate(context: vscode.ExtensionContext) {
     highlightManager = new HighlightManager(context);
+
+    // Add listener for active editor changes
+    vscode.window.onDidChangeActiveTextEditor((editor) => {
+        if (editor) {
+            highlightManager.updateEditorDecorations(editor);
+        }
+    }, null, context.subscriptions);
+
+    // Add listener for editor content changes
+    vscode.workspace.onDidChangeTextDocument((event) => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor && event.document === editor.document) {
+            highlightManager.updateEditorDecorations(editor);
+        }
+    }, null, context.subscriptions);
 
     // Add back the general highlight command that uses lastColor
     const highlightCommand = vscode.commands.registerCommand('highlight-buddy.highlight', () => {
