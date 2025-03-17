@@ -2,7 +2,7 @@
   "name": "highlight-buddy",
   "displayName": "Highlight Buddy",
   "description": "A simple and efficient code highlighter with multiple colors and customizable opacity. Perfect for code reviews and presentations.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "publisher": "SiddharthSangavi",
   "icon": "Buddy.png",
   "engines": {
@@ -64,7 +64,14 @@
     "keybindings": [
       {
         "command": "highlight-buddy.highlight",
-        "key": "cmd+h",
+        "key": "ctrl+alt+k",
+        "mac": "shift+cmd+k",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "highlight-buddy.removeHighlight",
+        "key": "ctrl+alt+l",
+        "mac": "shift+cmd+l",
         "when": "editorTextFocus"
       }
     ]

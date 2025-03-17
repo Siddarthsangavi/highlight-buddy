@@ -22,18 +22,23 @@ A powerful Visual Studio Code extension for code highlighting with multiple colo
 ## Usage
 
 ### Basic Highlighting
+
 1. **Quick Highlight**
+
    - Select text you want to highlight (or place cursor on a line)
-   - Press `Cmd+H` (macOS) to highlight with last used color
+   - Press `Shift+Cmd+K` (macOS) or `Ctrl+Alt+K` (Windows/Linux) to highlight with last used color
    - If no text is selected, the entire line will be highlighted
 
 2. **Managing Highlights**
+
    - Hover over any highlighted text to see options:
      - "Change Color": Changes the color of that specific highlight
      - "Remove Highlight": Removes just that highlight
    - These actions work regardless of cursor position
+   - You can also press `Shift+Cmd+L` (macOS) or `Ctrl+Alt+L` (Windows/Linux) to remove a highlight at cursor position
 
 3. **Using Different Colors**
+
    - Via Command Palette (`Cmd+Shift+P`):
      - "Highlight Buddy: Highlight Selection (Red)"
      - "Highlight Buddy: Highlight Selection (Blue)"
@@ -42,6 +47,7 @@ A powerful Visual Studio Code extension for code highlighting with multiple colo
    - Or use hover menu to change colors of existing highlights
 
 4. **Customizing Opacity**
+
    - Open Command Palette
    - Select "Highlight Buddy: Highlight Selection with Opacity"
    - Enter a value between 0 and 1 (e.g., 0.5 for 50% opacity)
@@ -53,17 +59,20 @@ A powerful Visual Studio Code extension for code highlighting with multiple colo
    - To remove a specific highlight:
      - Hover over the highlight
      - Click "Remove Highlight"
+     - Or place cursor on highlight and press `Shift+Cmd+L` (macOS) or `Ctrl+Alt+L` (Windows/Linux)
 
 ### Advanced Features
 
 1. **Multiple Overlapping Highlights**
+
    - You can highlight code that's already highlighted
    - Highlights won't interfere with each other
    - Great for marking multiple aspects of the same code
 
 2. **Full Line Highlighting**
+
    - Place cursor anywhere in a line (no selection needed)
-   - Press `Cmd+H` to highlight the entire line
+   - Press `Shift+Cmd+K` (macOS) or `Ctrl+Alt+K` (Windows/Linux) to highlight the entire line
 
 3. **Minimap Integration**
    - Highlights are visible in the minimap
@@ -73,7 +82,9 @@ A powerful Visual Studio Code extension for code highlighting with multiple colo
 
 - Default Color: Blue
 - Default Opacity: 0.8
-- Default Shortcut: `Cmd+H` (macOS)
+- Default Shortcuts:
+  - Highlight: `Shift+Cmd+K` (macOS) or `Ctrl+Alt+K` (Windows/Linux)
+  - Remove Highlight: `Shift+Cmd+L` (macOS) or `Ctrl+Alt+L` (Windows/Linux)
 
 ## Notes
 
