@@ -448,7 +448,6 @@ export function activate(context: vscode.ExtensionContext) {
     const removeHighlightCommand = vscode.commands.registerCommand('highlight-buddy.removeHighlight', (position?: vscode.Position) => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
-            // Use provided position from hover or fallback to cursor position
             const pos = position ?? editor.selection.active;
             highlightManager.removeHighlightAtPosition(editor, pos);
         }
@@ -457,7 +456,6 @@ export function activate(context: vscode.ExtensionContext) {
     const changeHighlightColorCommand = vscode.commands.registerCommand('highlight-buddy.changeHighlightColor', async (position?: vscode.Position) => {
         const editor = vscode.window.activeTextEditor;
         if (editor) {
-            // Use provided position from hover or fallback to cursor position
             const pos = position ?? editor.selection.active;
             const decoration = highlightManager.getDecorationAtPosition(editor, pos);
             
