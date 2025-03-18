@@ -92,7 +92,6 @@ A powerful Visual Studio Code extension for code highlighting with multiple colo
 - Color and opacity preferences are remembered
 - Multiple files can have highlights simultaneously
 - Supports all file types
-- Works with both light and dark themes
 
 ## Contributing
 
