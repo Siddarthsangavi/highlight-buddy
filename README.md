@@ -13,6 +13,10 @@ A powerful Visual Studio Code extension for code highlighting with multiple colo
 - Full line highlighting
 - Cross-file highlight management
 
+## Preview
+
+![Highlight Buddy Preview](./preview.gif)
+
 ## Installation
 
 1. Install from VS Code Marketplace by searching for "Highlight Buddy"

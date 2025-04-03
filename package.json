@@ -2,7 +2,7 @@
   "name": "highlight-buddy",
   "displayName": "Highlight Buddy",
   "description": "A simple and efficient code highlighter with multiple colors and customizable opacity. Perfect for code reviews and presentations.",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "publisher": "SiddharthSangavi",
   "icon": "Buddy.png",
   "engines": {
@@ -84,6 +84,9 @@
     "lint": "eslint src",
     "test": "vscode-test"
   },
+  "files": [
+    "preview.gif"
+  ],
   "devDependencies": {
     "@types/vscode": "^1.80.0",
     "@types/mocha": "^10.0.10",
